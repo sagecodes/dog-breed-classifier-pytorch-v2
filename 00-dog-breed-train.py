@@ -30,6 +30,7 @@ from resnet50 import Resnet50_pretrained
 from model_helpers import train
 from model_helpers import predict
 from model_helpers import plot_train_history
+from model_helpers import save_history_csv
 
 # torch
 import torch.nn as nn
@@ -58,7 +59,7 @@ valid_data_dir = '../datasets/dog_breeds/valid'
 ##########################
 
 img_size = 244
-batch_size = 32
+batch_size = 64
 num_workers = 0
 
 
@@ -106,7 +107,7 @@ if verbose:
 num_classes = 133
 
 # Compute device (cuda = GPU)
-device = 'cuda'
+device = 'cuda:0'
 
 # create model from model class
 res_model = Resnet50_pretrained(num_classes)
@@ -122,7 +123,6 @@ learn_rate = 0.001
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(res_model.model.fc.parameters(), lr=learn_rate)
 
-device = 'cuda'
 save_path = 'trained_models/dog_breeds.pt'
 
 #%% 
@@ -136,3 +136,8 @@ H = train(res_model.model, n_epochs, loaders, optimizer,
 if verbose:
     # Train Log
     plot_train_history(H,n_epochs)
+
+#%%
+save_history_csv(H,'trained_models/hist_dog_breeds50e.csv')
+
+# %%
