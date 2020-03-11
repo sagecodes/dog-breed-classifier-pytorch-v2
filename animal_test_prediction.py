@@ -15,33 +15,25 @@ import os
 #%%
 # Load model
 # Define architecture
-res_model = Resnet50_pretrained(3)
+res50 = Resnet50_pretrained(133)
 # Load weights, set ready for prediction
-res_model = load_model(res_model, 'trained_models/test_train.pt',True)
+res50 = load_model(res_model, 'trained_models/dog_breeds200.pt',True)
 
 # run prediction
 
 
 # %%
 # Data
-test_df = pd.read_csv('../datasets/test_animals/test_labels.csv')
-test_data_dir = '../datasets/test_animals/'
-print(test_df.head())
+test_data_dir = '../datasets/dog_breeds/test'
 
-# %%
-test_df
 
 
 # %%
 #Prediction 
 device = "cuda"
 
-paths = test_df["FilePath"]
 
-test_df["Label"] = pd.factorize(test_df["Label"])[0]
-true_labels = test_df["Label"].values.tolist()
-
-preds = []
+paths = glob.glob("images/*")
 
 for path in paths:
     image = os.path.join(test_data_dir, path)

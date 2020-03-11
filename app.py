@@ -20,8 +20,8 @@ from model_helpers import load_model
 from model_helpers import predict
 
 # Model for prediction
-res_model = Resnet50_pretrained(3)
-res_model = load_model(res_model, 'trained_models/test_train.pt',True)
+res_model = Resnet50_pretrained(133)
+res_model = load_model(res_model, 'trained_models/dog_breeds200.pt',True)
 
 # Temp device
 device = "cuda"

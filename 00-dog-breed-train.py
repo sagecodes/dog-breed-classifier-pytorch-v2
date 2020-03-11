@@ -31,6 +31,7 @@ from model_helpers import train
 from model_helpers import predict
 from model_helpers import plot_train_history
 from model_helpers import save_history_csv
+from model_helpers import load_model
 
 # torch
 import torch.nn as nn
@@ -41,7 +42,7 @@ import torch
 #%%
 
 # option to show datasets & vis while running in py script
-verbose = True
+verbose = False
 
 ##########################
 # Data Paths 
@@ -59,11 +60,11 @@ valid_data_dir = '../datasets/dog_breeds/valid'
 ##########################
 
 img_size = 244
-batch_size = 64
+batch_size = 32
 num_workers = 0
 
 
-# %% 
+ # %% 
 ##########################
 # Data Loaders
 ##########################
@@ -112,6 +113,9 @@ device = 'cuda:0'
 # create model from model class
 res_model = Resnet50_pretrained(num_classes)
 
+# Load trained weights
+res50 = load_model(res_model, 'trained_models/dog_breeds100.pt',False)
+
 #%%
 ##########################
 # Train Model
@@ -127,7 +131,7 @@ save_path = 'trained_models/dog_breeds.pt'
 
 #%% 
 # Train 
-H = train(res_model.model, n_epochs, loaders, optimizer,
+H = train(res50.model, n_epochs, loaders, optimizer,
                     criterion, device, save_path)
 
 
@@ -138,6 +142,6 @@ if verbose:
     plot_train_history(H,n_epochs)
 
 #%%
-save_history_csv(H,'trained_models/hist_dog_breeds50e.csv')
+save_history_csv(H,'trained_models/hist_dog_breeds200.csv')
 
 # %%
