@@ -15,6 +15,8 @@ import seaborn as sns
 import glob
 import os
 
+import numpy as np
+
 #%%
 # Load model
 # Define architecture
@@ -40,6 +42,9 @@ res50 = load_model(res50, 'trained_models/dog_breeds200.pt',True)
 
 # %%
 
+img_size = 244
+batch_size = 32
+num_workers = 0
 test_data_dir = '../datasets/dog_breeds/test'
 
 device = "cuda"
@@ -53,4 +58,34 @@ loaders = {
 }
 #%%
 
-image_plot(train_loader)
+image_plot(test_loader)
+
+# %%
+
+def test(loaders, model, device):
+
+    # monitor test accuracy
+    correct = 0.
+    total = 0.
+
+    for batch_idx, (data, target) in enumerate(loaders['test']):
+        # move to device
+        data = data.to(device)
+        target = target.to(device)
+        model = model.to(device)
+        # forward pass: compute predicted outputs by passing inputs to the model
+        output = model(data)
+        # convert output probabilities to predicted class
+        pred = output.data.max(1, keepdim=True)[1]
+        # compare predictions to true label
+        correct += np.sum(np.squeeze(pred.eq(target.data.view_as(pred))).cpu().numpy())
+        total += data.size(0)
+            
+    print('\nTest Accuracy: %2d%% (%2d/%2d)' % (
+        100. * correct / total, correct, total))
+
+# %%
+test(loaders, res50, device)
+
+
+# %%
