@@ -24,21 +24,6 @@ res50 = Resnet50_pretrained(133)
 # Load weights, set ready for prediction
 res50 = load_model(res50, 'trained_models/dog_breeds200.pt',True)
 
-# for path in paths:
-#     image = os.path.join(test_data_dir, path)
-#     print(image)
-#     preds.append(predict(res_model.model,image,device))
-
-# # %%
-# print(preds)
-# print(true_labels)
-
-# # %%
-# cm = confusion_matrix(true_labels, preds)
-
-# sns.heatmap(cm, annot =True)
-
-# print(classification_report(true_labels, preds))
 
 # %%
 
@@ -85,7 +70,7 @@ def test(loaders, model, device):
         100. * correct / total, correct, total))
 
 # %%
-test(loaders, res50, device)
+test(loaders, res50.model, device)
 
 
-# %%
+ # %%

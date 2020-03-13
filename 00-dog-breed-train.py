@@ -114,7 +114,7 @@ device = 'cuda:0'
 res_model = Resnet50_pretrained(num_classes)
 
 # Load trained weights
-res50 = load_model(res_model, 'trained_models/dog_breeds100.pt',False)
+res50 = load_model(res_model, 'trained_models/dog_breeds200.pt',False)
 
 #%%
 ##########################
